@@ -19,7 +19,7 @@ cp /etc/skel/.bashrc /root/.bashrc
 wget -O /tmp/build/profile.d.zip https://github.com/gpanula/profile.d/archive/master.zip
 cd /tmp/build
 unzip /tmp/build/profile.d.zip
-cp /tmp/build/profile.d/* /etc/profile.d/
+cp /tmp/build/profile.d-master/* /etc/profile.d/
 rm /etc/profile.d/README.md
 
 cd /etc/ssh
