@@ -1,6 +1,6 @@
 #!/bin/sh 
 
-yum -y install unzip wget
+yum -y install unzip wget vim-enhanced
 mkdir /tmp/build
 wget -O /tmp/build/skel.zip https://github.com/gpanula/skel/archive/master.zip
 cd /etc
