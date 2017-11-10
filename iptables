@@ -50,7 +50,7 @@ COMMIT
 -A INPUT -p icmp -j OKICMP
 -A INPUT -j IN_LOGNDROP
 -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
--A OUTPUT -s 104.200.67.12/32 -m state --state NEW -j ACCEPT
+-A OUTPUT -s LOCALIPADDRESS/32 -m state --state NEW -j ACCEPT
 -A OUTPUT -o lo -m state --state NEW -j ACCEPT
 -A OUTPUT -j OUT_LOGNDROP
 -A IN_LOGNDROP -m limit --limit 2/sec -j LOG --log-prefix "DENIED INBOUND: " --log-level 6
