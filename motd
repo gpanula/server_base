@@ -1,0 +1,13 @@
+
+systemctl cheat-sheet
+https://fedoraproject.org/wiki/SysVinit_to_Systemd_Cheatsheet
+
+systemctl list-unit-files --type=service
+
+list firewall
+firewall-cmd --permanent --zone=public --list-all
+
+add port to firewall
+firewall-cmd --permanent --zone=public --add-port=7946/tcp
+
+

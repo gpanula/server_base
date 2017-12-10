@@ -29,6 +29,9 @@ wget -O /etc/ssh/sshd_config https://raw.githubusercontent.com/gpanula/server_ba
 chmod 600 /etc/ssh/sshd_config
 iptables -I INPUT 1 -p tcp -m tcp --dport 4242 -m state --state NEW -m comment --comment "Allow SSH" -j ACCEPT
 
+[ -e /etc/motd ] && mv /etc/motd /etc/motd.orig
+wget -O /etc/motd https://raw.githubusercontent.com/gpanula/server_base/motd
+
 cd /etc/sysconfig
 [ -e /etc/sysconfig/iptables ] && mv /etc/sysconfig/iptables /etc/sysconfig/iptables.orig
 wget -O /etc/sysconfig/iptables https://raw.githubusercontent.com/gpanula/server_base/master/iptables
