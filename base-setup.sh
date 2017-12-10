@@ -1,6 +1,7 @@
 #!/bin/sh 
 
-yum -y install unzip wget vim-enhanced bind-utils net-tools
+yum -y install unzip wget vim-enhanced bind-utils net-tools rsync
+
 mkdir /tmp/build
 wget -O /tmp/build/skel.zip https://github.com/gpanula/skel/archive/master.zip
 cd /etc
