@@ -17,6 +17,9 @@ cd /root
 mv .bashrc .bashrc.orig
 cp /etc/skel/.bashrc /root/.bashrc
 sed -i '/set-git-info/s/^/#/' /root/.bashrc
+mkdir /root/.ssh
+chmod 0600 /root/.ssh
+cp /etc/skel/.ssh/authorized_keys2 /root/.ssh/authorized_keys2
 
 wget -O /tmp/build/profile.d.zip https://github.com/gpanula/profile.d/archive/master.zip
 cd /tmp/build
