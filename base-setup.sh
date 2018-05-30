@@ -28,6 +28,7 @@ cd /etc/ssh
 mv sshd_config sshd_config.orig
 wget -O /etc/ssh/sshd_config https://raw.githubusercontent.com/gpanula/server_base/master/sshd_config
 chmod 600 /etc/ssh/sshd_config
+awk '$5 >= 3071' /etc/ssh/moduli > /etc/ssh/moduli.tmp && mv /etc/ssh/moduli /etc/ssh/moduli.OLD && mv /etc/ssh/moduli.tmp /etc/ssh/moduli
 iptables -I INPUT 1 -p tcp -m tcp --dport 4242 -m state --state NEW -m comment --comment "Allow SSH" -j ACCEPT
 
 [ -e /etc/motd ] && mv /etc/motd /etc/motd.orig
