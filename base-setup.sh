@@ -29,7 +29,19 @@ mv sshd_config sshd_config.orig
 wget -O /etc/ssh/sshd_config https://raw.githubusercontent.com/gpanula/server_base/master/sshd_config
 chmod 600 /etc/ssh/sshd_config
 awk '$5 >= 3071' /etc/ssh/moduli > /etc/ssh/moduli.tmp && mv /etc/ssh/moduli /etc/ssh/moduli.OLD && mv /etc/ssh/moduli.tmp /etc/ssh/moduli
-iptables -I INPUT 1 -p tcp -m tcp --dport 4242 -m state --state NEW -m comment --comment "Allow SSH" -j ACCEPT
+
+if [ ! -z "$( which firewall-cmd )" ]
+then
+    echo Found firewall-cmd, going to use it
+    cp /usr/lib/firewalld/services/ssh.xml /usr/lib/firewalld/services/ssh4242.xml
+    sed 's/SSH/SSH4242/' -i /usr/lib/firewalld/services/ssh4242.xml
+    sed 's/22/4242/' -i /usr/lib/firewalld/services/ssh4242.xml
+    $( which firewall-cmd ) --permanent --zone=public --add-service ssh4242
+    $( which firewall-cmd ) --reload
+else
+    echo Firewall-cmd not found, going to use straight iptables
+    iptables -I INPUT 1 -p tcp -m tcp --dport 4242 -m state --state NEW -m comment --comment "Allow SSH" -j ACCEPT
+fi
 
 # allow sshd to listen on port 4242
 semanage port -a -t ssh_port_t -p tcp 4242
