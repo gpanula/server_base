@@ -1,6 +1,6 @@
 #!/bin/sh 
 
-yum -y install unzip wget vim-enhanced bind-utils net-tools rsync
+yum -y install unzip wget vim-enhanced bind-utils net-tools rsync policycoreutils-python
 
 mkdir /tmp/build
 wget -O /tmp/build/skel.zip https://github.com/gpanula/skel/archive/master.zip
@@ -30,6 +30,9 @@ wget -O /etc/ssh/sshd_config https://raw.githubusercontent.com/gpanula/server_ba
 chmod 600 /etc/ssh/sshd_config
 awk '$5 >= 3071' /etc/ssh/moduli > /etc/ssh/moduli.tmp && mv /etc/ssh/moduli /etc/ssh/moduli.OLD && mv /etc/ssh/moduli.tmp /etc/ssh/moduli
 iptables -I INPUT 1 -p tcp -m tcp --dport 4242 -m state --state NEW -m comment --comment "Allow SSH" -j ACCEPT
+
+# allow sshd to listen on port 4242
+semanage port -a -t ssh_port_t -p tcp 4242
 
 [ -e /etc/motd ] && mv /etc/motd /etc/motd.orig
 wget -O /etc/motd https://raw.githubusercontent.com/gpanula/server_base/master/motd
