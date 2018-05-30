@@ -49,5 +49,7 @@ semanage port -a -t ssh_port_t -p tcp 4242
 [ -e /etc/motd ] && mv /etc/motd /etc/motd.orig
 wget -O /etc/motd https://raw.githubusercontent.com/gpanula/server_base/master/motd
 
+# ditch the unneed firmware
+rpm -qa | grep firmware | grep -v linux | xargs yum remove -y
 
 exit 0
