@@ -36,6 +36,8 @@ then
     cp /usr/lib/firewalld/services/ssh.xml /usr/lib/firewalld/services/ssh4242.xml
     sed 's/SSH/SSH4242/' -i /usr/lib/firewalld/services/ssh4242.xml
     sed 's/22/4242/' -i /usr/lib/firewalld/services/ssh4242.xml
+    # need a pause here for firewalld to see the new service
+    $( which firewall-cmd ) --reload
     $( which firewall-cmd ) --permanent --zone=public --add-service ssh4242
     $( which firewall-cmd ) --reload
 else
