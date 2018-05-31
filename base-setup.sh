@@ -16,6 +16,7 @@ chmod 640 /etc/skel/.ssh/authorized_keys2
 cd /root
 mv .bashrc .bashrc.orig
 cp /etc/skel/.bashrc /root/.bashrc
+cp /etc/skel/.vimrc /root/.vimrc
 sed -i '/set-git-info/s/^/#/' /root/.bashrc
 mkdir /root/.ssh
 chmod 0600 /root/.ssh
