@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # need git for this to work
-[ ! $( which git ) ] && exit 99
+[ ! $( which git ) ] && echo "missing git" && exit 99
 
 # grab profile.d repo
 git clone https://github.com/gpanula/profile.d.git  /tmp/profile.d.$$
