@@ -3,31 +3,19 @@
 yum -y install unzip wget vim-enhanced bind-utils net-tools rsync policycoreutils-python
 
 mkdir /tmp/build
-wget -O /tmp/build/skel.zip https://github.com/gpanula/skel/archive/master.zip
-cd /etc
-unzip /tmp/build/skel.zip
-mv /etc/skel /etc/skel.orig
-mv /etc/skel-master /etc/skel
-rm -f /etc/skel/LICENSE 
-rm -f /etc/skel/.LICENSE
-rm -f /etc/skel/README.md
-chmod 640 /etc/skel/.ssh/authorized_keys2
+## sync skel
+wget -O /tmp/sync-skel.$$ https://raw.githubusercontent.com/gpanula/server_base/different/sync-skel.sh
+chmod +x /tmp/sync-skel.$$
+/tmp/sync-skel.$$
+rm -f /tmp/sync-skel.$$
 
-cd /root
-mv .bashrc .bashrc.orig
-cp /etc/skel/.bashrc /root/.bashrc
-cp /etc/skel/.vimrc /root/.vimrc
-sed -i '/set-git-info/s/^/#/' /root/.bashrc
-mkdir /root/.ssh
-chmod 0600 /root/.ssh
-cp /etc/skel/.ssh/authorized_keys2 /root/.ssh/authorized_keys2
+## sync profile.d
+wget -O /tmp/sync-profile.$$ https://raw.githubusercontent.com/gpanula/server_base/different/sync-profile_d.sh
+chmod +x /tmp/sync-profile.$$
+/tmp/sync-profile.$$
+rm -f /tmp/sync-profile.$$
 
-wget -O /tmp/build/profile.d.zip https://github.com/gpanula/profile.d/archive/master.zip
-cd /tmp/build
-unzip /tmp/build/profile.d.zip
-cp /tmp/build/profile.d-master/* /etc/profile.d/
-rm -f /etc/profile.d/README.md
-
+## setup sshd
 cd /etc/ssh
 mv sshd_config sshd_config.orig
 wget -O /etc/ssh/sshd_config https://raw.githubusercontent.com/gpanula/server_base/master/sshd_config
