@@ -1,19 +1,19 @@
-#!/bin/sh 
+#!/bin/sh
 
-yum -y install unzip wget vim-enhanced bind-utils net-tools rsync policycoreutils-python
+yum -y install unzip wget vim-enhanced bind-utils net-tools rsync policycoreutils-python rsyslog chrony
 
 mkdir /tmp/build
 wget -O /tmp/build/skel.zip https://github.com/gpanula/skel/archive/master.zip
-cd /etc
+cd /etc || exit 99
 unzip /tmp/build/skel.zip
 mv /etc/skel /etc/skel.orig
 mv /etc/skel-master /etc/skel
-rm -f /etc/skel/LICENSE 
+rm -f /etc/skel/LICENSE
 rm -f /etc/skel/.LICENSE
 rm -f /etc/skel/README.md
 chmod 640 /etc/skel/.ssh/authorized_keys2
 
-cd /root
+cd /root || exit 99
 mv .bashrc .bashrc.orig
 cp /etc/skel/.bashrc /root/.bashrc
 cp /etc/skel/.vimrc /root/.vimrc
@@ -23,12 +23,12 @@ chmod 0600 /root/.ssh
 cp /etc/skel/.ssh/authorized_keys2 /root/.ssh/authorized_keys2
 
 wget -O /tmp/build/profile.d.zip https://github.com/gpanula/profile.d/archive/master.zip
-cd /tmp/build
+cd /tmp/build || exit 99
 unzip /tmp/build/profile.d.zip
 cp /tmp/build/profile.d-master/* /etc/profile.d/
 rm -f /etc/profile.d/README.md
 
-cd /etc/ssh
+cd /etc/ssh || exit 99
 mv sshd_config sshd_config.orig
 wget -O /etc/ssh/sshd_config https://raw.githubusercontent.com/gpanula/server_base/master/sshd_config
 chmod 600 /etc/ssh/sshd_config
