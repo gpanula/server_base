@@ -58,4 +58,10 @@ wget -O /etc/motd https://raw.githubusercontent.com/gpanula/server_base/master/m
 # ditch the unneed firmware
 rpm -qa | grep firmware | grep -v linux | xargs yum remove -y
 
+# quick note about cmd-line speedtest
+echo "You can check your speed via"
+echo "curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
+echo ""
+echo "ref: https://askubuntu.com/questions/104755/how-to-check-internet-speed-via-terminal"
+
 exit 0
