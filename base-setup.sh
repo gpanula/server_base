@@ -27,6 +27,7 @@ sed -i '/set-git-info/s/^/#/' /root/.bashrc
 mkdir /root/.ssh
 chmod 0600 /root/.ssh
 cp /etc/skel/.ssh/authorized_keys2 /root/.ssh/authorized_keys2
+ln -s /root/.ssh/authorized_keys2 /root/.ssh/authorized_keys
 
 wget -O /tmp/build/profile.d.zip https://github.com/gpanula/profile.d/archive/master.zip
 cd /tmp/build || exit 99
