@@ -1,0 +1,18 @@
+[Unit]
+Description=Update /etc/motd with useful info
+
+[Service]
+Type=oneshot
+# put the target in place and update its ownership
+ExecStartPre=/usr/bin/touch /var/run/motd
+ExecStartPre=/usr/bin/chown nobody:nobody /var/run/motd
+# symlink /etc/motd to /var/run/motd (if it isn't already a symlink)
+ExecStartPre=/usr/bin/sh -c '[ ! -h /etc/motd ] && find /etc -type f -iname motd -exec mv {} /etc/motd.$(date +%F) \; && ln -s /var/run/motd /etc/motd'
+ExecStart=/usr/bin/sh -c '/usr/local/bin/dynamotd.sh > /var/run/motd'
+# Run ExecStartPre with root-permissions
+# ref: https://blog.hqcodeshop.fi/archives/93-Handling-varrun-with-systemd.html
+PermissionsStartOnly=true
+
+# ref
+# https://coreos.com/os/docs/latest/scheduling-tasks-with-systemd-timers.html
+# https://www.linux.com/blog/intro-to-linux/2018/8/systemd-timers-two-use-cases-0

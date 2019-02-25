@@ -1,0 +1,9 @@
+[Unit]
+Description=Run dynamotd.service every two minutes
+
+[Timer]
+OnCalendar=*:0/10
+
+# ref
+# https://coreos.com/os/docs/latest/scheduling-tasks-with-systemd-timers.html
+# https://www.linux.com/blog/intro-to-linux/2018/8/systemd-timers-two-use-cases-0

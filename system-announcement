@@ -1,0 +1,5 @@
+systemctl cheat-sheet
+https://fedoraproject.org/wiki/SysVinit_to_Systemd_Cheatsheet
+
+systemctl list-unit-files --type=service
+systemctl list-timers

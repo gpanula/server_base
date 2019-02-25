@@ -2,6 +2,12 @@
 
 yum -y install unzip wget vim-enhanced bind-utils net-tools rsync policycoreutils-python rsyslog chrony
 
+# install epel repo
+yum -y install epel-release
+
+# install figlet (used by dynamotd)
+yum -y install figlet
+
 mkdir /tmp/build
 wget -O /tmp/build/skel.zip https://github.com/gpanula/skel/archive/master.zip
 cd /etc || exit 99
@@ -53,15 +59,42 @@ fi
 semanage port -a -t ssh_port_t -p tcp 4242
 
 [ -e /etc/motd ] && mv /etc/motd /etc/motd.orig
-wget -O /etc/motd https://raw.githubusercontent.com/gpanula/server_base/master/motd
+# Put "dynamic" motd in place
+wget -O /usr/local/etc/system-location https://raw.githubusercontent.com/gpanula/server_base/master/system-location
+wget -O /usr/local/etc/system-announcement https://raw.githubusercontent.com/gpanula/server_base/master/system-announcement
+wget -O /etc/systemd/system/dynamotd.service https://raw.githubusercontent.com/gpanula/server_base/master/dynamotd.service
+wget -O /etc/systemd/system/dynamotd.timer https://raw.githubusercontent.com/gpanula/server_base/master/dynamotd.timer
+/usr/bin/systemctl daemon-reload
+/usr/bin/systemctl enable dynamotd.timer
+/usr/bin/systemctl start dynamotd.service
+ln -s /var/run/motd /etc/motd
 
 # ditch the unneed firmware
 rpm -qa | grep firmware | grep -v linux | xargs yum remove -y
+
+# disable postfix
+/usr/bin/systemctl stop postfix
+/usr/bin/systemctl disable postfix
+
+# disable rpcbind
+/usr/bin/syustemctl stop rpcbind
+/usr/bin/syustemctl disable rpcbind
+/usr/bin/syustemctl stop rpcbind.socket
+/usr/bin/syustemctl disable rpcbind.socket
+
+# bug-fix
+# ref: https://bugs.centos.org/view.php?id=11228
+sed '/ControlGroup/d' -i /usr/lib/systemd/system/watchdog.service
+/usr/bin/systemctl daemon-reload
 
 # quick note about cmd-line speedtest
 echo "You can check your speed via"
 echo "curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
 echo ""
 echo "ref: https://askubuntu.com/questions/104755/how-to-check-internet-speed-via-terminal"
+
+echo ""
+echo "Remember to update /usr/local/etc/system-location or remove it if running in AWS"
+echo ""
 
 exit 0
