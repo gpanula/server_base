@@ -78,10 +78,10 @@ rpm -qa | grep firmware | grep -v linux | xargs yum remove -y
 /usr/bin/systemctl disable postfix
 
 # disable rpcbind
-/usr/bin/syustemctl stop rpcbind
-/usr/bin/syustemctl disable rpcbind
-/usr/bin/syustemctl stop rpcbind.socket
-/usr/bin/syustemctl disable rpcbind.socket
+/usr/bin/systemctl stop rpcbind
+/usr/bin/systemctl disable rpcbind
+/usr/bin/systemctl stop rpcbind.socket
+/usr/bin/systemctl disable rpcbind.socket
 
 # bug-fix
 # ref: https://bugs.centos.org/view.php?id=11228
