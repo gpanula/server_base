@@ -8,6 +8,13 @@ yum -y install epel-release
 # install figlet (used by dynamotd)
 yum -y install figlet
 
+# install ius repo (mostly for git2)
+# ref: https://ius.io/GettingStarted/
+yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+
+# install firewalld
+yum -y install firewalld
+
 mkdir /tmp/build
 wget -O /tmp/build/skel.zip https://github.com/gpanula/skel/archive/master.zip
 cd /etc || exit 99
