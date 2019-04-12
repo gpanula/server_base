@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sysctl=$( which systemctl )
+systemctl=$( which systemctl )
 
 yum -y install unzip wget vim-enhanced bind-utils net-tools rsync policycoreutils-python rsyslog chrony
 
@@ -16,8 +16,11 @@ yum -y install https://centos7.iuscommunity.org/ius-release.rpm
 
 # install firewalld
 yum -y install firewalld
-$sysctl enable firewalld
-$sysctl start firewalld
+$systemctl enable firewalld
+$systemctl start firewalld
+
+# capture kernel messages
+echo "kern.*   /var/log/kernel" > /etc/rsyslog.d/kernel.conf
 
 mkdir /tmp/build
 wget -O /tmp/build/skel.zip https://github.com/gpanula/skel/archive/master.zip
@@ -78,28 +81,28 @@ wget -O /etc/systemd/system/dynamotd.service https://raw.githubusercontent.com/g
 wget -O /etc/systemd/system/dynamotd.timer https://raw.githubusercontent.com/gpanula/server_base/master/dynamotd.timer
 wget -O /usr/local/bin/dynamotd.sh https://raw.githubusercontent.com/gpanula/server_base/master/dynamotd.sh
 chmod +x /usr/local/bin/dynamotd.sh
-$sysctl daemon-reload
-$sysctl enable dynamotd.timer
-$sysctl start dynamotd.service
+$systemctl daemon-reload
+$systemctl enable dynamotd.timer
+$systemctl start dynamotd.service
 ln -s /var/run/motd /etc/motd
 
 # ditch the unneed firmware
 rpm -qa | grep firmware | grep -v linux | xargs yum remove -y
 
 # disable postfix
-$sysctl stop postfix
-$sysctl disable postfix
+$systemctl stop postfix
+$systemctl disable postfix
 
 # disable rpcbind
-$sysctl stop rpcbind
-$sysctl disable rpcbind
-$sysctl stop rpcbind.socket
-$sysctl disable rpcbind.socket
+$systemctl stop rpcbind
+$systemctl disable rpcbind
+$systemctl stop rpcbind.socket
+$systemctl disable rpcbind.socket
 
 # bug-fix
 # ref: https://bugs.centos.org/view.php?id=11228
 sed '/ControlGroup/d' -i /usr/lib/systemd/system/watchdog.service
-$sysctl daemon-reload
+$systemctl daemon-reload
 
 # quick note about cmd-line speedtest
 echo "You can check your speed via"
