@@ -1,8 +1,10 @@
 #!/bin/sh
 
+# install package that provides the which command
+yum -y install which
 systemctl=$( which systemctl )
 
-yum -y install unzip wget vim-enhanced bind-utils net-tools rsync policycoreutils-python rsyslog chrony
+yum -y install unzip wget vim-enhanced bind-utils net-tools rsync policycoreutils-python rsyslog chrony sudo openssl
 
 # install epel repo
 yum -y install epel-release
