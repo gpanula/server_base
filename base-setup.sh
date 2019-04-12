@@ -1,5 +1,7 @@
 #!/bin/sh
 
+sysctl=$( which systemctl )
+
 yum -y install unzip wget vim-enhanced bind-utils net-tools rsync policycoreutils-python rsyslog chrony
 
 # install epel repo
@@ -14,6 +16,8 @@ yum -y install https://centos7.iuscommunity.org/ius-release.rpm
 
 # install firewalld
 yum -y install firewalld
+$sysctl enable firewalld
+$sysctl start firewalld
 
 mkdir /tmp/build
 wget -O /tmp/build/skel.zip https://github.com/gpanula/skel/archive/master.zip
@@ -72,28 +76,30 @@ wget -O /usr/local/etc/system-location https://raw.githubusercontent.com/gpanula
 wget -O /usr/local/etc/system-announcement https://raw.githubusercontent.com/gpanula/server_base/master/system-announcement
 wget -O /etc/systemd/system/dynamotd.service https://raw.githubusercontent.com/gpanula/server_base/master/dynamotd.service
 wget -O /etc/systemd/system/dynamotd.timer https://raw.githubusercontent.com/gpanula/server_base/master/dynamotd.timer
-/usr/bin/systemctl daemon-reload
-/usr/bin/systemctl enable dynamotd.timer
-/usr/bin/systemctl start dynamotd.service
+wget -O /usr/local/bin/dynamotd.sh https://raw.githubusercontent.com/gpanula/server_base/master/dynamotd.sh
+chmod +x /usr/local/bin/dynamotd.sh
+$sysctl daemon-reload
+$sysctl enable dynamotd.timer
+$sysctl start dynamotd.service
 ln -s /var/run/motd /etc/motd
 
 # ditch the unneed firmware
 rpm -qa | grep firmware | grep -v linux | xargs yum remove -y
 
 # disable postfix
-/usr/bin/systemctl stop postfix
-/usr/bin/systemctl disable postfix
+$sysctl stop postfix
+$sysctl disable postfix
 
 # disable rpcbind
-/usr/bin/systemctl stop rpcbind
-/usr/bin/systemctl disable rpcbind
-/usr/bin/systemctl stop rpcbind.socket
-/usr/bin/systemctl disable rpcbind.socket
+$sysctl stop rpcbind
+$sysctl disable rpcbind
+$sysctl stop rpcbind.socket
+$sysctl disable rpcbind.socket
 
 # bug-fix
 # ref: https://bugs.centos.org/view.php?id=11228
 sed '/ControlGroup/d' -i /usr/lib/systemd/system/watchdog.service
-/usr/bin/systemctl daemon-reload
+$sysctl daemon-reload
 
 # quick note about cmd-line speedtest
 echo "You can check your speed via"
